@@ -61,7 +61,7 @@ jobs:
           is_bump="false"
           old_version=$(cat version.txt)
 
-          if [[ $VERSION -ne $old_version ]]; then
+          if [[ "$VERSION" -ne "$old_version" ]]; then
             is_bump="true"
           fi
 
