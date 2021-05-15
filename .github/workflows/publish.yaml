@@ -1,6 +1,11 @@
 name: Publish to PyPI
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_tag_name_input:
+        description: "Release Tag Name <X.X.X>"
+        required: true
   release:
     types:
       - publish
@@ -15,14 +20,32 @@ jobs:
       - uses: actions/setup-python@dc73133d4da04e56a135ae2246682783cc7c7cb6
         with:
           python-version: 3.7
-
-      - name: Install pypa/build
+      
+      - name: get version
+        id: get-version
         run: |
-          python -m pip install build --user
+          if [[ "${{ github.event_name }}" -ne "release" ]]; then
+            echo "::set-output name=version::$RELEASE_TAG_NAME_INPUT"
+            echo "::set-output name=tag_version::v$RELEASE_TAG_NAME_INPUT"
+          else
+            tag_version=$(echo ${{ github.ref }} | cut -d "/" -f 3)
+            version=${tag_version:1}
+            echo "::set-output name=tag_version::$tag_version"
+            echo "::set-output name=version::$version"
+          fi
+        env:
+          RELEASE_TAG_NAME_INPUT: ${{ github.event.inputs.release_tag_name_input }}
 
-      - name: Build binary wheel and source tarball
-        run: |
-          python -m build --sdist --wheel --outdir dist/
+      - name: get wheel release asset
+        uses: Xotl/cool-github-releases@16c58a5863d6ba9944f63ca8bb78bb3249ce1d81
+        with:
+          mode: download
+          tag_name: ${{ steps.get-version.outputs.tag_version }}
+          assets: graphene-pynamodb-${{ steps.get-version.outputs.version.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
+          github_token: ${{ github.token }}
+
+      - name: test
+        run: ls -atlh
 
       - name: Publish distribution to PyPI
         if: false

@@ -52,7 +52,6 @@ jobs:
 
           if [[ "$VERSION" != "$old_version" ]]; then
             is_bump="true"
-            echo $VERSION > version.txt
           fi
 
           # Testing code
@@ -81,7 +80,7 @@ jobs:
         run: |
           hub release edit \
             -a ./dist/graphene-pynamodb-$VERSION.tar.gz \
-            -a ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl \
+            -a ./dist/graphene_pynamodb-$VERSION-py3-none-any.whl \
             -m "Version $VERSION" v$VERSION
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
