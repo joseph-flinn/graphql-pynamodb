@@ -32,9 +32,6 @@ jobs:
       - name: Build binary wheel and source tarball
         run: python -m build --sdist --wheel --outdir dist
 
-      - name: test
-        run: ls -alth dist
-
       - name: "Upload Build Asset: tar"
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
@@ -76,6 +73,9 @@ jobs:
           echo "::set-output name=is_bump::$is_bump"
         env:
           VERSION: ${{ steps.get-version.outputs.version }}
+
+      - name: test
+        run: echo "is_bump: ${{ steps.version-bump-check.outputs.is_bump }}"
 
       - name: Create release
         if: ${{ steps.version-bump-check.outputs.is_bump }} == "true"
