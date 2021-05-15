@@ -70,13 +70,13 @@ jobs:
       - name: Create release
         if: steps.version-bump-check.outputs.is_bump == 'true'
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "${{ steps.get-version.outputs.version }}"
+          tag_name: "v${{ steps.get-version.outputs.version }}"
           release_name: "${{ steps.get-version.outputs.version }}"
           draft: true
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         if: steps.version-bump-check.outputs.is_bump == 'true'
@@ -84,7 +84,7 @@ jobs:
           hub release edit \
             -a ./dist/graphene-pynamodb-$VERSION.tar.gz \
             -a ./dist/graphene_pynamodb-$VERSION-py3-none-any.whl \
-            -m "Version $VERSION" $VERSION
+            -m "Version $VERSION" v$VERSION
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get-version.outputs.version }}
