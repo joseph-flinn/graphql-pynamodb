@@ -41,7 +41,7 @@ jobs:
         with:
           mode: download
           tag_name: ${{ steps.get-version.outputs.tag_version }}
-          assets: graphene-pynamodb-${{ steps.get-version.outputs.version.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
+          assets: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           github_token: ${{ github.token }}
 
       - name: test
