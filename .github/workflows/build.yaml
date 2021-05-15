@@ -44,16 +44,11 @@ jobs:
           name: graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           path: ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
 
-      - name: test
-        run: hub release -L 1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check for version bump
         id: version-bump-check
         run: |
           is_bump="false"
-          old_version="2.3.1"
+          old_version=$(hub release -L 1)
 
           if [[ "$VERSION" != "$old_version" ]]; then
             is_bump="true"
@@ -68,6 +63,7 @@ jobs:
           echo "::set-output name=is_bump::$is_bump"
         env:
           VERSION: ${{ steps.get-version.outputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create release
         if: steps.version-bump-check.outputs.is_bump == 'true'
