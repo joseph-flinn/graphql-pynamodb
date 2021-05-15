@@ -44,22 +44,14 @@ jobs:
           name: graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           path: ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
 
-      - name: setup version cache
-        run: |
-          # Sets up the initial run on version 2.3.1
-          echo "2.3.1" > version.txt
-
-      - name: Get cached version
-        uses: actions/cache@1a9e2138d905efd099035b49d8b7a3888c653ca8
-        with:
-          path: ./version.txt
-          key: version-${{ steps.get-version.outputs.version }}
+      - name: test
+        run: hub release -L 1
 
       - name: Check for version bump
         id: version-bump-check
         run: |
           is_bump="false"
-          old_version=$(cat version.txt)
+          old_version="2.3.1"
 
           if [[ "$VERSION" != "$old_version" ]]; then
             is_bump="true"
