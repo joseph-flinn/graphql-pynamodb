@@ -53,8 +53,7 @@ jobs:
         uses: actions/cache@1a9e2138d905efd099035b49d8b7a3888c653ca8
         with:
           path: ./version.txt
-          key: |
-            version-${{ steps.get-version.outputs.version }}
+          key: version-${{ steps.get-version.outputs.version }}
 
       - name: Check for version bump
         id: version-bump-check
