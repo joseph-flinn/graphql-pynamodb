@@ -96,4 +96,5 @@ jobs:
             -a ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl \
             -m "Version $VERSION" v$VERSION
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get-version.outputs.version }}
