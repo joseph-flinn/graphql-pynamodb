@@ -1,8 +1,53 @@
-name: Publish
+name: Publish to PyPI
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      release_tag_name_input:
+        description: "Release Tag Name <X.X.X>"
+        required: true
   release:
     types:
-      - published
+      - publish
+
+
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: get version
+        id: get-version
+        run: |
+          if [[ "${{ github.event_name }}" != "release" ]]; then
+            echo "::set-output name=version::$RELEASE_TAG_NAME_INPUT"
+            echo "::set-output name=tag_version::v$RELEASE_TAG_NAME_INPUT"
+          else
+            tag_version=$(echo ${{ github.ref }} | cut -d "/" -f 3)
+            version=${tag_version:1}
+            echo "::set-output name=tag_version::$tag_version"
+            echo "::set-output name=version::$version"
+          fi
+        env:
+          RELEASE_TAG_NAME_INPUT: ${{ github.event.inputs.release_tag_name_input }}
+
+      - name: get wheel release asset
+        uses: Xotl/cool-github-releases@16c58a5863d6ba9944f63ca8bb78bb3249ce1d81
+        with:
+          mode: download
+          tag_name: ${{ steps.get-version.outputs.tag_version }}
+          assets: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz|./dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl|./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
+          github_token: ${{ github.token }}
+
+      - name: test
+        run: ls -atlh dist
+
+      - name: Publish distribution to PyPI
+        if: false
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+      
+>>>>>>> add-automation
 
