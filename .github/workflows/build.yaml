@@ -32,6 +32,9 @@ jobs:
       - name: Build binary wheel and source tarball
         run: python -m build --sdist --wheel --outdir dist
 
+      - name: test
+        run: ls -alth dist
+
       - name: "Upload Build Asset: tar"
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
