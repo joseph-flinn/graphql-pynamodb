@@ -30,14 +30,12 @@ jobs:
           RELEASE_TAG_NAME_INPUT: ${{ github.event.inputs.release_tag_name_input }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: get wheel release asset
+      - name: get release assets
         uses: Xotl/cool-github-releases@16c58a5863d6ba9944f63ca8bb78bb3249ce1d81
         with:
           mode: download
           tag_name: ${{ steps.get-version.outputs.version }}
-          assets: |
-            graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz|./dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;
-            graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl|./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
+          assets: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz|./dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl|./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: test
