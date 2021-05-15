@@ -35,18 +35,14 @@ jobs:
       - name: "Upload Build Asset: tar"
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
-          name: graphene-pynamodb-$VERSION.tar.gz
+          name: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz
           path: ./dist/graphene-pynamodb-$VERSION.tar-gz
-        env:
-          VERSION: ${{ steps.get-version.outputs.version }}
 
       - name: "Upload Build Asset: wheel"
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: graphene_pynamodb-$VERSION-py3-none-any.whl
-          path: ./dist/graphene_pynamodb-$VERSION-py3-none-any.whl
-        env:
-          VERSION: ${{ steps.get-version.outputs.version }}
+          path: ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
 
       - name: setup version cache
         run: |
