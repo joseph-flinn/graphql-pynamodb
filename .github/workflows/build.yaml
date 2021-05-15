@@ -74,12 +74,6 @@ jobs:
         env:
           VERSION: ${{ steps.get-version.outputs.version }}
 
-      - name: test
-        run: |
-          echo "is_bump: $BUMP"
-        env:
-          BUMP: ${{ steps.version-bump-check.outputs.is_bump }}
-
       - name: Create release
         if: steps.version-bump-check.outputs.is_bump == 'true'
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
