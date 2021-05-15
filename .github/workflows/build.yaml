@@ -75,9 +75,10 @@ jobs:
           VERSION: ${{ steps.get-version.outputs.version }}
 
       - name: test
-        run: echo "is_bump: $IS_BUMP"
+        run: |
+          echo "is_bump: $BUMP"
         env:
-          IS_BUMP: ${{ steps.version-bump-check.outputs.is_bump }}
+          BUMP: ${{ steps.version-bump-check.outputs.is_bump }}
 
       - name: Create release
         if: ${{ steps.version-bump-check.outputs.is_bump }} == "true"
