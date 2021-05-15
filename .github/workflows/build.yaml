@@ -63,6 +63,7 @@ jobs:
 
           if [[ "$VERSION" != "$old_version" ]]; then
             is_bump="true"
+            echo $VERSION > version.txt
           fi
 
           # Testing code
