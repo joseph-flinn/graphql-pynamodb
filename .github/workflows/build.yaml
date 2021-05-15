@@ -25,7 +25,7 @@ jobs:
           version=$(grep version setup.py | grep -o "[0-9].[0-9].[0-9]")
           echo "version: $version"
           echo "::set-output name=version::$version"
-          echo "::set-output name=tag_version::v$version"
+          #echo "::set-output name=tag_version::v$version"
 
       - name: Install pypa/build
         run: python -m pip install build --user
@@ -73,8 +73,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ steps.get-version.outputs.version }}"
-          release_name: "Version ${{ steps.get-version.outputs.version }}"
+          tag_name: "${{ steps.get-version.outputs.version }}"
+          release_name: "${{ steps.get-version.outputs.version }}"
           draft: true
           prerelease: false
 
@@ -84,7 +84,7 @@ jobs:
           hub release edit \
             -a ./dist/graphene-pynamodb-$VERSION.tar.gz \
             -a ./dist/graphene_pynamodb-$VERSION-py3-none-any.whl \
-            -m "Version $VERSION" v$VERSION
+            -m "Version $VERSION" $VERSION
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get-version.outputs.version }}
