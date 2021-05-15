@@ -72,8 +72,8 @@ jobs:
         uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09
         with:
           artifacts: |
-            "dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz,
-            dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl"
+            dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz,
+            dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           commit: ${{ github.sha }}
           tag: ${{ steps.get-version.outputs.version }}
           name: "Version ${{ steps.get-version.outputs.version }}"
