@@ -37,11 +37,11 @@ jobs:
         with:
           mode: download
           tag_name: ${{ steps.get-version.outputs.tag_version }}
-          assets: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
+          assets: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz|./dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz;graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl|./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           github_token: ${{ github.token }}
 
       - name: test
-        run: ls -atlh
+        run: ls -atlh dist
 
       - name: Publish distribution to PyPI
         if: false
