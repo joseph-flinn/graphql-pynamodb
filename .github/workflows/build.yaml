@@ -36,12 +36,12 @@ jobs:
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar.gz
-          path: ./dist/graphene-pynamodb-$VERSION.tar-gz
+          path: ./dist/graphene-pynamodb-${{ steps.get-version.outputs.version }}.tar-gz
 
       - name: "Upload Build Asset: wheel"
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
-          name: graphene_pynamodb-$VERSION-py3-none-any.whl
+          name: graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
           path: ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl
 
       - name: setup version cache
@@ -85,3 +85,12 @@ jobs:
           draft: true
           prerelease: false
 
+      - name: Upload release assets
+        if: ${{ steps.version-bump-check.outputs.is_bump }} == "true"
+        run: |
+          hub release edit \
+            -a ./dist/graphene-pynamodb-$VERSION.tar-gz \
+            -a ./dist/graphene_pynamodb-${{ steps.get-version.outputs.version }}-py3-none-any.whl \
+            -m "Version $VERSION" v$VERSION
+        env:
+          VERSION: ${{ steps.get-version.outputs.version }}
